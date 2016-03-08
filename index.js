@@ -22,14 +22,14 @@ var prerender = module.exports = function(req, res, next) {
     }
 
     prerender.getPrerenderedPageResponse(req, function(err, prerenderedResponse){
-      prerender.afterRenderFn(err, req, prerenderedResponse);
-
-      if(prerenderedResponse){
-        res.writeHead(prerenderedResponse.statusCode, prerenderedResponse.headers);
-        return res.end(prerenderedResponse.body);
-      } else {
-        next(err);
-      }
+      prerender.afterRenderFn(err, req, prerenderedResponse, function () {
+        if(prerenderedResponse){
+          res.writeHead(prerenderedResponse.statusCode, prerenderedResponse.headers);
+          return res.end(prerenderedResponse.body);
+        } else {
+          next(err);
+        }
+      });
     });
   });
 };
@@ -249,10 +249,10 @@ prerender.beforeRenderFn = function(req, done) {
 };
 
 
-prerender.afterRenderFn = function(err, req, prerender_res) {
-  if (!this.afterRender) return;
+prerender.afterRenderFn = function(err, req, prerender_res, done) {
+  if (!this.afterRender) return done();
 
-  this.afterRender(err, req, prerender_res);
+  this.afterRender(err, req, prerender_res, done);
 };
 
 
