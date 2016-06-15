@@ -50,7 +50,7 @@ prerender.crawlerUserAgents = [
   'quora link preview',
   'showyoubot',
   'outbrain',
-  'pinterest',
+  'pinterest/0.',
   'developers.google.com/+/web/snippet',
   'slackbot',
   'vkShare',
@@ -58,7 +58,9 @@ prerender.crawlerUserAgents = [
   'redditbot',
   'Applebot',
   'WhatsApp',
-  'flipboard'
+  'flipboard',
+  'tumblr',
+  'bitlybot'
 ];
 
 
@@ -102,7 +104,8 @@ prerender.extensionsToIgnore = [
   '.m4v',
   '.torrent',
   '.woff',
-  '.ttf'
+  '.ttf',
+  '.svg'
 ];
 
 
@@ -128,7 +131,7 @@ prerender.shouldShowPrerenderedPage = function(req) {
 
   //if it contains _escaped_fragment_, show prerendered page
   var parsedQuery = url.parse(req.url, true).query;
-  if(parsedQuery && parsedQuery.hasOwnProperty('_escaped_fragment_')) isRequestingPrerenderedPage = true;
+  if(parsedQuery && parsedQuery['_escaped_fragment_'] !== undefined) isRequestingPrerenderedPage = true;
 
   //if it is a bot...show prerendered page
   if(prerender.crawlerUserAgents.some(function(crawlerUserAgent){ return userAgent.toLowerCase().indexOf(crawlerUserAgent.toLowerCase()) !== -1;})) isRequestingPrerenderedPage = true;
